@@ -1,0 +1,13 @@
+[package]
+name = "sentence_transformers"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+burn = { path="./burn/burn" }
+burn-wgpu = { path="./burn/burn-wgpu" }
+burn-tch = { path="./burn/burn-tch" }
+npy = "0.4.0"
+ndarray = "0.15.6"

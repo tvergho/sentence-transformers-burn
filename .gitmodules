@@ -1,0 +1,3 @@
+[submodule "burn"]
+	path = burn
+	url = https://github.com/burn-rs/burn.git
