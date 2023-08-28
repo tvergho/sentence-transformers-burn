@@ -6,7 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-burn = { path="./burn/burn" }
+burn = { path="./burn/burn" } # v0.8.0 was not compiling for some reason
 burn-wgpu = { path="./burn/burn-wgpu" }
 burn-tch = { path="./burn/burn-tch" }
 libm = "0.2.7"

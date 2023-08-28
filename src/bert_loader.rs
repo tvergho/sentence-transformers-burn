@@ -5,8 +5,8 @@ use burn::{
   tensor::{backend::Backend, Tensor, Data, Shape},
 };
 use crate::model::{
-  bert_encoder::{BertEncoderConfig, BertEncoderRecord, BertEncoderLayerRecord, BertOutputRecord, BertIntermediateRecord, BertAttentionRecord, BertSelfAttentionRecord, BertSelfOutputRecord}, 
-  bert_embeddings::{BertEmbeddingsRecord, BertEmbeddingsConfig}, 
+  bert_encoder::{BertEncoderRecord, BertEncoderLayerRecord, BertOutputRecord, BertIntermediateRecord, BertAttentionRecord, BertSelfAttentionRecord, BertSelfOutputRecord}, 
+  bert_embeddings::BertEmbeddingsRecord,
   bert_model::{BertModelConfig, BertModelRecord, BertModel}
 };
 use std::io::Read;
@@ -193,7 +193,7 @@ fn load_embeddings<B: Backend>(embeddings_dir: &str) -> BertEmbeddingsRecord<B> 
   embeddings_record
 }
 
-pub fn load_model<B: Backend>(dir: &str, device: &B::Device) -> BertModel<B> {
+pub fn load_model<B: Backend>(dir: &str, device: &B::Device, config: BertModelConfig) -> BertModel<B> {
   let encoder_record = load_encoder::<B>(&format!("{}/encoder/", dir));
   let embeddings_record = load_embeddings::<B>(&format!("{}/embeddings/", dir));
 
@@ -202,28 +202,7 @@ pub fn load_model<B: Backend>(dir: &str, device: &B::Device) -> BertModel<B> {
       encoder: encoder_record,
   };
 
-  let embeddings_config = BertEmbeddingsConfig {
-    vocab_size: 30522,
-    max_position_embeddings: 512,
-    type_vocab_size: 2,
-    hidden_size: 384,
-    hidden_dropout_prob: 0.1,
-    layer_norm_eps: 1e-12,
-  };
-
-  let mut model = BertModelConfig {
-    config: embeddings_config,
-    encoder: BertEncoderConfig {
-      d_model: 384,
-      n_heads: 12,
-      n_layers: 12,
-      dropout: 0.1,
-      layer_norm_eps: 1e-12,
-      hidden_size: 384,
-      intermediate_size: 1536,
-      hidden_act: "gelu".to_string(),
-    },
-  }.init_with::<B>(model_record);
+  let mut model = config.init_with::<B>(model_record);
 
   model = model.to_device(device);
   model

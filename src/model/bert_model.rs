@@ -9,8 +9,22 @@ use super::bert_encoder::{BertEncoder, BertEncoderConfig, BertEncoderInput};
 // Define the Bert model configuration
 #[derive(Config)]
 pub struct BertModelConfig {
-  pub encoder: BertEncoderConfig,
-  pub config: BertEmbeddingsConfig,
+  /// The size of the model.
+  pub d_model: usize,
+  /// The number of attention heads.
+  pub n_heads: usize,
+  /// The number of layers.
+  pub n_layers: usize,
+  /// The dropout rate.
+  pub dropout: f64,
+  pub layer_norm_eps: f64,
+  pub hidden_size: usize,
+  pub intermediate_size: usize,
+  pub hidden_act: String,
+  pub vocab_size: usize,
+  pub max_position_embeddings: usize,
+  pub type_vocab_size: usize,
+  pub hidden_dropout_prob: f64,
 }
 
 // Define the Bert model structure
@@ -23,24 +37,56 @@ pub struct BertModel<B: Backend> {
 impl BertModelConfig {
     /// Initializes a Bert model with default weights
     pub fn init<B: Backend>(&self) -> BertModel<B> {
-        let encoder = self.encoder.init();
-        let embeddings = self.config.init();
+      let embeddings = BertEmbeddingsConfig {
+        vocab_size: self.vocab_size,
+        max_position_embeddings: self.max_position_embeddings,
+        type_vocab_size: self.type_vocab_size,
+        hidden_size: self.hidden_size,
+        hidden_dropout_prob: self.hidden_dropout_prob,
+        layer_norm_eps: self.layer_norm_eps,
+      }.init();
+      let encoder = BertEncoderConfig {
+        d_model: self.d_model,
+        n_heads: self.n_heads,
+        n_layers: self.n_layers,
+        dropout: self.dropout,
+        layer_norm_eps: self.layer_norm_eps,
+        hidden_size: self.hidden_size,
+        intermediate_size: self.intermediate_size,
+        hidden_act: "gelu".to_string(),
+      }.init();
 
-        BertModel {
-          encoder,
-          embeddings,
-        }
+      BertModel {
+        encoder,
+        embeddings,
+      }
     }
 
     /// Initializes a Bert model with provided weights
     pub fn init_with<B: Backend>(&self, record: BertModelRecord<B>) -> BertModel<B> {
-        let encoder = self.encoder.init_with(record.encoder);
-        let embeddings = self.config.init_with(record.embeddings);
+      let embeddings = BertEmbeddingsConfig {
+        vocab_size: self.vocab_size,
+        max_position_embeddings: self.max_position_embeddings,
+        type_vocab_size: self.type_vocab_size,
+        hidden_size: self.hidden_size,
+        hidden_dropout_prob: self.hidden_dropout_prob,
+        layer_norm_eps: self.layer_norm_eps,
+      }.init_with(record.embeddings);
+      let encoder = BertEncoderConfig {
+        d_model: self.d_model,
+        n_heads: self.n_heads,
+        n_layers: self.n_layers,
+        dropout: self.dropout,
+        layer_norm_eps: self.layer_norm_eps,
+        hidden_size: self.hidden_size,
+        intermediate_size: self.intermediate_size,
+        hidden_act: "gelu".to_string(),
+      }.init_with(record.encoder);
 
-        BertModel {
-            encoder,
-            embeddings,
-        }
+      BertModel {
+          encoder,
+          embeddings,
+      }
     }
 }
 

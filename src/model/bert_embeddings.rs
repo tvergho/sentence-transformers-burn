@@ -26,7 +26,7 @@ pub struct BertEmbeddings<B: Backend> {
   word_embeddings: Embedding<B>,
   position_embeddings: Embedding<B>,
   token_type_embeddings: Embedding<B>,
-  pub layer_norm: LayerNorm<B>,
+  layer_norm: LayerNorm<B>,
   dropout: Dropout,
   max_position_embeddings: usize,
 }
