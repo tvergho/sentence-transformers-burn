@@ -380,33 +380,18 @@ impl<B: Backend> BertSelfAttention<B> {
     let key_layer = self.key.forward(hidden_states.clone());
     let value_layer = self.value.forward(hidden_states.clone());
 
-    // println!("Key pre transpose {:?}", &key_layer.clone().to_data().value[30..60]);
-
-    let query_layer = self.transpose_for_scores(&query_layer);  // I'm using unwrap here for brevity.
+    let query_layer = self.transpose_for_scores(&query_layer);
     let key_layer = self.transpose_for_scores(&key_layer);
     let value_layer = self.transpose_for_scores(&value_layer);
 
-    // Print the shape of the query, key, and value layers
-    // println!("Query {:?}", &query_layer.clone().to_data().value[30..60]);
-    // println!("Key {:?}", &key_layer.clone().to_data().value[30..60]);
-    // println!("Value {:?}", &value_layer.clone().to_data().value[30..60]);
-
-    // println!("Key layer transposed {:?}", &key_layer.clone().swap_dims(2, 3).to_data().value[30..60]);
-    // println!("Key layer transposed shape {:?}", &key_layer.clone().swap_dims(2, 3).shape());
-
     let attention_scores = query_layer.clone().matmul(key_layer.swap_dims(2, 3)).div_scalar(sqrtf(self.attention_head_size as f32));
-    // println!("Attention Scores {:?}", &attention_scores.clone().to_data().value[0..32]);
-    // println!("Mask Attn {:?}", &mask_attn.clone().to_data().value[0..8]);
     let attention_scores = attention_scores + mask_attn;
     let attention_probs = activation::softmax(attention_scores, 3);
     let attention_probs = self.dropout.forward(attention_probs);
 
     let context_layer = attention_probs.matmul(value_layer);
-
-    // Print the shape of the context layer
-    // println!("Context Layer {:?}", &context_layer.clone().to_data().value[0..8]);
     let context_layer = context_layer.swap_dims(1, 2).flatten(2, 3);
-    // println!("Context Layer Reshaped {:?}", &context_layer.clone().to_data().value[0..8]);
+
     context_layer
   }
 
@@ -422,7 +407,6 @@ impl<B: Backend> BertSelfAttention<B> {
       c => panic!("Unexpected tensor dimensions {:?}", c),
     };
 
-    // println!("Array Shape {:?}", array_shape.clone());
     let xs = xs.clone().reshape(array_shape).swap_dims(1, 2);
     xs
   }

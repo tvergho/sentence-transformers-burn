@@ -60,8 +60,6 @@ impl BertEmbeddingsConfig {
       &self,
       record: BertEmbeddingsRecord<B>,
   ) -> BertEmbeddings<B> {
-      // I'm making an assumption on what BertEmbeddingsRecord looks like. 
-      // You would adjust this according to the actual structure.
       let word_embeddings = 
           EmbeddingConfig::new(self.vocab_size, self.hidden_size).init_with(record.word_embeddings);
       let position_embeddings = 
@@ -97,9 +95,6 @@ impl<B: Backend> BertEmbeddings<B> {
 
     let device = embeddings.device();
 
-    // Create token type embeddings. 
-    // The original PyTorch code implies there might be a default tensor of zeros if token_type_ids is None.
-    // I'm going to replicate this behavior by creating a tensor of zeros.
     let token_type_ids = Tensor::<B, 2, Int>::zeros(input_shape.clone()).to_device(&device.clone()); // Assuming you have a zeros method
     let token_type_embeddings = self.token_type_embeddings.forward(token_type_ids);
 

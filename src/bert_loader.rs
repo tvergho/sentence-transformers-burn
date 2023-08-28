@@ -10,7 +10,7 @@ use crate::model::{
   bert_model::{BertModelConfig, BertModelRecord, BertModel}
 };
 use std::io::Read;
-use npy::{NpyData};
+use npy::NpyData;
 
 fn load_npy_scalar<B: Backend>(filename: &str) -> Vec<f32> {
     // Open the file in read-only mode.
