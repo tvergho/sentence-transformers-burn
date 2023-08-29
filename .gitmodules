@@ -1,3 +1,6 @@
 [submodule "burn"]
 	path = burn
 	url = https://github.com/burn-rs/burn.git
+[submodule "candle"]
+	path = candle
+	url = https://github.com/huggingface/candle.git
