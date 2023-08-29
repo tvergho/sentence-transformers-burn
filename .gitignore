@@ -1,3 +1,7 @@
 /target
 /Cargo.lock
 venv/
+tests/model
+tests/outputs
+.DS_Store
+__pycache__/

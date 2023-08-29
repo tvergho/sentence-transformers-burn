@@ -1,3 +1,2 @@
-mod model;
-
+pub mod model;
 pub mod bert_loader;

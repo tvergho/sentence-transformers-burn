@@ -10,8 +10,6 @@ use libm::sqrtf;
 
 #[derive(Config)]
 pub struct BertEncoderConfig {
-    /// The size of the model.
-    pub d_model: usize,
     /// The number of attention heads.
     pub n_heads: usize,
     /// The number of layers.

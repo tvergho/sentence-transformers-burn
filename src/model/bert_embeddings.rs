@@ -40,8 +40,8 @@ impl BertEmbeddingsConfig {
           EmbeddingConfig::new(self.max_position_embeddings, self.hidden_size).init();
       let token_type_embeddings = 
           EmbeddingConfig::new(self.type_vocab_size, self.hidden_size).init();
-      let mut layer_norm_config = LayerNormConfig::new(self.hidden_size);
-      layer_norm_config = layer_norm_config.with_epsilon(self.layer_norm_eps);
+      let layer_norm_config = LayerNormConfig::new(self.hidden_size);
+      let layer_norm_config = layer_norm_config.with_epsilon(self.layer_norm_eps);
       let layer_norm = layer_norm_config.init();
       let dropout = DropoutConfig::new(self.hidden_dropout_prob).init();
 
@@ -66,8 +66,8 @@ impl BertEmbeddingsConfig {
           EmbeddingConfig::new(self.max_position_embeddings, self.hidden_size).init_with(record.position_embeddings);
       let token_type_embeddings = 
           EmbeddingConfig::new(self.type_vocab_size, self.hidden_size).init_with(record.token_type_embeddings);
-      let mut layer_norm_config = LayerNormConfig::new(self.hidden_size);
-      layer_norm_config = layer_norm_config.with_epsilon(self.layer_norm_eps);
+      let layer_norm_config = LayerNormConfig::new(self.hidden_size);
+      let layer_norm_config = layer_norm_config.with_epsilon(self.layer_norm_eps);
       let layer_norm = layer_norm_config.init_with(record.layer_norm);
 
       let dropout = DropoutConfig::new(self.hidden_dropout_prob).init();
