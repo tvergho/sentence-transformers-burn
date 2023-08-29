@@ -7,10 +7,10 @@ import numpy as np
 
 config = BertConfig(
   vocab_size=30522,
-  hidden_size=192,
-  num_hidden_layers=6,
-  num_attention_heads=6,
-  intermediate_size=768,
+  hidden_size=384,
+  num_hidden_layers=12,
+  num_attention_heads=12,
+  intermediate_size=1536,
   hidden_act="gelu",
   hidden_dropout_prob=0.1,
   layer_norm_eps=1e-12,

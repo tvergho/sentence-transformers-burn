@@ -31,76 +31,76 @@ pub struct BertModel<B: Backend> {
 }
 
 impl BertModelConfig {
-    /// Initializes a Bert model with default weights
-    pub fn init<B: Backend>(&self) -> BertModel<B> {
-      let embeddings = BertEmbeddingsConfig {
-        vocab_size: self.vocab_size,
-        max_position_embeddings: self.max_position_embeddings,
-        type_vocab_size: self.type_vocab_size,
-        hidden_size: self.hidden_size,
-        hidden_dropout_prob: self.hidden_dropout_prob,
-        layer_norm_eps: self.layer_norm_eps,
-      }.init();
-      let encoder = BertEncoderConfig {
-        n_heads: self.n_heads,
-        n_layers: self.n_layers,
-        dropout: self.hidden_dropout_prob,
-        layer_norm_eps: self.layer_norm_eps,
-        hidden_size: self.hidden_size,
-        intermediate_size: self.intermediate_size,
-        hidden_act: "gelu".to_string(),
-      }.init();
+  /// Initializes a Bert model with default weights
+  pub fn init<B: Backend>(&self) -> BertModel<B> {
+    let embeddings = BertEmbeddingsConfig {
+      vocab_size: self.vocab_size,
+      max_position_embeddings: self.max_position_embeddings,
+      type_vocab_size: self.type_vocab_size,
+      hidden_size: self.hidden_size,
+      hidden_dropout_prob: self.hidden_dropout_prob,
+      layer_norm_eps: self.layer_norm_eps,
+    }.init();
+    let encoder = BertEncoderConfig {
+      n_heads: self.n_heads,
+      n_layers: self.n_layers,
+      dropout: self.hidden_dropout_prob,
+      layer_norm_eps: self.layer_norm_eps,
+      hidden_size: self.hidden_size,
+      intermediate_size: self.intermediate_size,
+      hidden_act: "gelu".to_string(),
+    }.init();
 
-      BertModel {
+    BertModel {
+      encoder,
+      embeddings,
+    }
+  }
+
+  /// Initializes a Bert model with provided weights
+  pub fn init_with<B: Backend>(&self, record: BertModelRecord<B>) -> BertModel<B> {
+    let embeddings = BertEmbeddingsConfig {
+      vocab_size: self.vocab_size,
+      max_position_embeddings: self.max_position_embeddings,
+      type_vocab_size: self.type_vocab_size,
+      hidden_size: self.hidden_size,
+      hidden_dropout_prob: self.hidden_dropout_prob,
+      layer_norm_eps: self.layer_norm_eps,
+    }.init_with(record.embeddings);
+    let encoder = BertEncoderConfig {
+      n_heads: self.n_heads,
+      n_layers: self.n_layers,
+      dropout: self.hidden_dropout_prob,
+      layer_norm_eps: self.layer_norm_eps,
+      hidden_size: self.hidden_size,
+      intermediate_size: self.intermediate_size,
+      hidden_act: "gelu".to_string(),
+    }.init_with(record.encoder);
+
+    BertModel {
         encoder,
         embeddings,
-      }
     }
-
-    /// Initializes a Bert model with provided weights
-    pub fn init_with<B: Backend>(&self, record: BertModelRecord<B>) -> BertModel<B> {
-      let embeddings = BertEmbeddingsConfig {
-        vocab_size: self.vocab_size,
-        max_position_embeddings: self.max_position_embeddings,
-        type_vocab_size: self.type_vocab_size,
-        hidden_size: self.hidden_size,
-        hidden_dropout_prob: self.hidden_dropout_prob,
-        layer_norm_eps: self.layer_norm_eps,
-      }.init_with(record.embeddings);
-      let encoder = BertEncoderConfig {
-        n_heads: self.n_heads,
-        n_layers: self.n_layers,
-        dropout: self.hidden_dropout_prob,
-        layer_norm_eps: self.layer_norm_eps,
-        hidden_size: self.hidden_size,
-        intermediate_size: self.intermediate_size,
-        hidden_act: "gelu".to_string(),
-      }.init_with(record.encoder);
-
-      BertModel {
-          encoder,
-          embeddings,
-      }
-    }
+  }
 }
 
 impl<B: Backend> BertModel<B> {
-    /// Defines forward pass
-    pub fn forward(&self, input: BertEmbeddingsInferenceBatch<B>) -> Tensor<B, 3> {
-        let embedding = self.embeddings.forward(input.clone());
+  /// Defines forward pass
+  pub fn forward(&self, input: BertEmbeddingsInferenceBatch<B>) -> Tensor<B, 3> {
+    let embedding = self.embeddings.forward(input.clone());
 
-        let shape = input.tokens.shape();
-        let mut mask_attn: Tensor<B, 2> = Tensor::ones(shape.clone()).to_device(&input.tokens.device());
-        if input.mask_attn.is_some() {
-          mask_attn = input.mask_attn.unwrap();
-        }
-
-        let extended_mask_attn = self.get_extended_attention_mask(mask_attn, shape.dims);
-
-        let encoder_input = BertEncoderInput::new(embedding, extended_mask_attn);
-        let output = self.encoder.forward(encoder_input);
-        output
+    let shape = input.tokens.shape();
+    let mut mask_attn: Tensor<B, 2> = Tensor::ones(shape.clone()).to_device(&input.tokens.device());
+    if input.mask_attn.is_some() {
+      mask_attn = input.mask_attn.unwrap();
     }
+
+    let extended_mask_attn = self.get_extended_attention_mask(mask_attn, shape.dims);
+
+    let encoder_input = BertEncoderInput::new(embedding, extended_mask_attn);
+    let output = self.encoder.forward(encoder_input);
+    output
+  }
 
   pub fn get_extended_attention_mask(
       &self,

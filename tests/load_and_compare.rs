@@ -33,11 +33,11 @@ fn compare_dump_model_outputs() {
   let path = setup();
   let device = TchDevice::Cpu;
   let config = BertModelConfig { 
-    n_heads: 6, 
-    n_layers: 6, 
+    n_heads: 12, 
+    n_layers: 12, 
     layer_norm_eps: 1e-12, 
-    hidden_size: 192, 
-    intermediate_size: 768, 
+    hidden_size: 384, 
+    intermediate_size: 1536, 
     hidden_act: "gelu".to_string(),
     vocab_size: 30522, 
     max_position_embeddings: 512, 
@@ -86,11 +86,11 @@ fn compare_safetensors_model_outputs() {
   let path = setup();
   let device = TchDevice::Cpu;
   let config = BertModelConfig { 
-    n_heads: 6, 
-    n_layers: 6, 
+    n_heads: 12, 
+    n_layers: 12, 
     layer_norm_eps: 1e-12, 
-    hidden_size: 192, 
-    intermediate_size: 768, 
+    hidden_size: 384, 
+    intermediate_size: 1536, 
     hidden_act: "gelu".to_string(),
     vocab_size: 30522, 
     max_position_embeddings: 512, 
