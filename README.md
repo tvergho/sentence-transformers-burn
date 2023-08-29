@@ -15,9 +15,9 @@ This library provides an implementation of the [Sentence Transformers](https://g
 Currently **inference-only** for now.
 
 ## Features
-- Import models via `safetensors` (using [Candle](https://github.com/huggingface/candle)) 📦
-- Code structure replicates the official Huggingface `BertModel` implementation 🚀
-- Flexible inference backend using Burn 🔧
+- Import models via `safetensors` (using [Candle](https://github.com/huggingface/candle)). 📦
+- Code structure replicates the official Huggingface `BertModel` implementation. 🚀
+- Flexible inference backend using Burn. 🔧
 
 ## Installation
 `sentence-transformers-burn` can be installed from source.
