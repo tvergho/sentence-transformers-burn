@@ -10,9 +10,11 @@ use crate::model::{
   bert_model::{BertModelConfig, BertModelRecord, BertModel}
 };
 use std::io::Read;
+use std::fs::File;
+use std::collections::HashMap;
 use npy::NpyData;
 use candle::{safetensors, Device, Tensor as CandleTensor};
-use std::collections::HashMap;
+use serde_json::Value;
 
 fn load_npy_scalar<B: Backend>(filename: &str) -> Vec<f32> {
     // Open the file in read-only mode.
@@ -423,4 +425,24 @@ pub fn load_model_from_safetensors<B: Backend>(file_path: &str, device: &B::Devi
 
   model = model.to_device(device);
   model
+}
+
+pub fn load_config_from_json(json_path: &str) -> BertModelConfig {
+  let file = File::open(json_path).expect("Unable to open file");
+  let config: HashMap<String, Value> = serde_json::from_reader(file).expect("Unable to parse JSON");
+
+  let model_config = BertModelConfig {
+    n_heads: config["num_attention_heads"].as_i64().unwrap() as usize,
+    n_layers: config["num_hidden_layers"].as_i64().unwrap() as usize,
+    layer_norm_eps: config["layer_norm_eps"].as_f64().unwrap() as f64,
+    hidden_size: config["hidden_size"].as_i64().unwrap() as usize,
+    intermediate_size: config["intermediate_size"].as_i64().unwrap() as usize,
+    hidden_act: config["hidden_act"].as_str().unwrap().to_string(),
+    vocab_size: config["vocab_size"].as_i64().unwrap() as usize,
+    max_position_embeddings: config["max_position_embeddings"].as_i64().unwrap() as usize,
+    type_vocab_size: config["type_vocab_size"].as_i64().unwrap() as usize,
+    hidden_dropout_prob: config["hidden_dropout_prob"].as_f64().unwrap() as f64,
+  };
+
+  model_config
 }

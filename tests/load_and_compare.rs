@@ -1,8 +1,8 @@
 extern crate sentence_transformers;
 
-use sentence_transformers::bert_loader::{load_model, load_model_from_safetensors};
+use sentence_transformers::bert_loader::{load_model, load_model_from_safetensors, load_config_from_json};
 use sentence_transformers::model::bert_embeddings::BertEmbeddingsInferenceBatch;
-use sentence_transformers::model::bert_model::{BertModel, BertModelConfig};
+use sentence_transformers::model::bert_model::BertModel;
 use burn_tch::{TchDevice, TchBackend};
 use burn::tensor::{Tensor, Shape};
 use npy::NpyData;
@@ -32,18 +32,7 @@ fn setup() -> String {
 fn compare_dump_model_outputs() {
   let path = setup();
   let device = TchDevice::Cpu;
-  let config = BertModelConfig { 
-    n_heads: 12, 
-    n_layers: 12, 
-    layer_norm_eps: 1e-12, 
-    hidden_size: 384, 
-    intermediate_size: 1536, 
-    hidden_act: "gelu".to_string(),
-    vocab_size: 30522, 
-    max_position_embeddings: 512, 
-    type_vocab_size: 2, 
-    hidden_dropout_prob: 0.1 
-  };
+  let config = load_config_from_json(&format!("{}/model/bert_config.json", path));
 
   let model: BertModel<TchBackend<f32>> = load_model((path.clone() + "/model").as_str(), &device, config);
 
@@ -85,18 +74,7 @@ fn compare_dump_model_outputs() {
 fn compare_safetensors_model_outputs() {
   let path = setup();
   let device = TchDevice::Cpu;
-  let config = BertModelConfig { 
-    n_heads: 12, 
-    n_layers: 12, 
-    layer_norm_eps: 1e-12, 
-    hidden_size: 384, 
-    intermediate_size: 1536, 
-    hidden_act: "gelu".to_string(),
-    vocab_size: 30522, 
-    max_position_embeddings: 512, 
-    type_vocab_size: 2, 
-    hidden_dropout_prob: 0.1 
-  };
+  let config = load_config_from_json(&format!("{}/model/bert_config.json", path));
 
   let model: BertModel<TchBackend<f32>> = load_model_from_safetensors::<TchBackend<f32>>((path.clone() + "/model/bert_model.safetensors").as_str(), &device, config.clone());
   

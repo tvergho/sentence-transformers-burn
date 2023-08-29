@@ -1,9 +1,9 @@
 use burn::tensor::{Tensor, Int, Data, Shape};
 use sentence_transformers::model::{
   bert_embeddings::BertEmbeddingsInferenceBatch,
-  bert_model::{BertModel, BertModelConfig},
+  bert_model::BertModel,
 };
-use sentence_transformers::bert_loader::load_model_from_safetensors;
+use sentence_transformers::bert_loader::{load_model_from_safetensors, load_config_from_json};
 use burn_tch::{TchBackend, TchDevice};
 use warp::Filter;
 use serde::Deserialize;
@@ -72,23 +72,12 @@ async fn embed_handler(
 
 #[tokio::main]
 async fn main() {
-  let config = BertModelConfig { 
-    n_heads: 12, 
-    n_layers: 12, 
-    layer_norm_eps: 1e-12, 
-    hidden_size: 384, 
-    intermediate_size: 1536, 
-    hidden_act: "gelu".to_string(),
-    vocab_size: 30522, 
-    max_position_embeddings: 512, 
-    type_vocab_size: 2, 
-    hidden_dropout_prob: 0.1 
-  };
-
   let device = TchDevice::Mps;
   let args: Vec<String> = env::args().collect();
-  let model_path = args.get(1).expect("Expected model path as first argument");
-  let model: Arc<BertModel<_>> = Arc::new(load_model_from_safetensors::<TchBackend<f32>>(model_path, &device, config));
+  let model_path = args.get(1).expect("Expected model directory as first argument");
+
+  let config = load_config_from_json(&format!("{}/bert_config.json", model_path));
+  let model: Arc<BertModel<_>> = Arc::new(load_model_from_safetensors::<TchBackend<f32>>(&format!("{}/bert_model.safetensors", model_path), &device, config));
 
   let with_model_device = warp::any().map(move || (model.clone(), device.clone()));
 
