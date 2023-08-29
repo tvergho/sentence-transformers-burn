@@ -1,0 +1,35 @@
+[package]
+authors = ["nathanielsimard <nathaniel.simard.42@gmail.com>"]
+edition = "2021"
+license = "MIT OR Apache-2.0"
+name = "text-classification"
+publish = false
+version = "0.9.0"
+
+[features]
+f16 = []
+ndarray = ["burn-ndarray"]
+ndarray-blas-accelerate = ["burn-ndarray/blas-accelerate"]
+ndarray-blas-netlib = ["burn-ndarray/blas-netlib"]
+ndarray-blas-openblas = ["burn-ndarray/blas-openblas"]
+tch-cpu = ["burn-tch"]
+tch-gpu = ["burn-tch"]
+wgpu = ["burn-wgpu"]
+
+[dependencies]
+# Burn
+burn = { path = "../../burn" }
+burn-autodiff = { path = "../../burn-autodiff" }
+burn-ndarray = { path = "../../burn-ndarray", optional = true }
+burn-tch = { path = "../../burn-tch", optional = true }
+burn-wgpu = { path = "../../burn-wgpu", optional = true }
+
+# Tokenizer
+tokenizers = { version = "0.13.4", default-features = false, features = [
+  "onig",
+  "http",
+] }
+
+# Utils
+derive-new = { workspace = true }
+serde = { workspace = true, features = ["std", "derive"] }
