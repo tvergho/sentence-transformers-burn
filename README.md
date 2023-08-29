@@ -5,13 +5,14 @@
 ![license](https://shields.io/badge/license-MIT%2FApache--2.0-blue)
 [![Rust Version](https://img.shields.io/badge/Rust-1.65.0+-blue)](https://releases.rs/docs/1.65.0)
 ![PRs welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen)
+
+<div align="left">
+
 # Sentence Transformers in Burn
 
 This library provides an implementation of the [Sentence Transformers](https://github.com/UKPLab/sentence-transformers) framework for computing text representations as vector embeddings in Rust. Specifically, it uses the [Burn](https://github.com/burn-rs/burn) deep learning to implement the **BERT model**. Using Burn, this can be combined with any supported backend for fast, efficient, cross-platform inference on CPUs and GPUs. ST-Burn supports any [state-of-the-art model](https://huggingface.co/spaces/mteb/leaderboard) that implements the BERT architecture.
 
 Currently **inference-only** for now.
-
-<div align="left">
 
 ## Features
 - Import models via `safetensors` (using [Candle](https://github.com/huggingface/candle)) 📦
