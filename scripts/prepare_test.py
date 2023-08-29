@@ -18,6 +18,7 @@ config = BertConfig(
 )
 
 model = BertModel(config)
+model = BertModel.from_pretrained("BAAI/bge-small-en")
 model.requires_grad_(False)
 model.eval()
 
