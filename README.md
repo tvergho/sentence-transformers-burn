@@ -99,7 +99,7 @@ Tests can be run to verify that the Rust model output matches a comparable Huggi
 ```
 cargo run test
 ```
-# To Do
+## To Do
 - [x] Cleaner model import (directly from safetensors/config.json)
 - [ ] Proper documentation and more testing
 - [ ] More model usage options (e.g. classification, NER, question answering heads)
