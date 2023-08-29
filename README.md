@@ -1,11 +1,17 @@
+<div align="center">
+
+<img src="./assets/background.png" width="400px"/>
+
 ![license](https://shields.io/badge/license-MIT%2FApache--2.0-blue)
 [![Rust Version](https://img.shields.io/badge/Rust-1.65.0+-blue)](https://releases.rs/docs/1.65.0)
-
-# Sentence Transformers in Burn (ST-Burn)
+![PRs welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen)
+# Sentence Transformers in Burn
 
 This library provides an implementation of the [Sentence Transformers](https://github.com/UKPLab/sentence-transformers) framework for computing text representations as vector embeddings in Rust. Specifically, it uses the [Burn](https://github.com/burn-rs/burn) deep learning to implement the **BERT model**. Using Burn, this can be combined with any supported backend for fast, efficient, cross-platform inference on CPUs and GPUs. ST-Burn supports any [state-of-the-art model](https://huggingface.co/spaces/mteb/leaderboard) that implements the BERT architecture.
 
 Currently **inference-only** for now.
+
+<div align="left">
 
 ## Features
 - Import models via `safetensors` (using [Candle](https://github.com/huggingface/candle)) 📦
@@ -41,7 +47,6 @@ python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 ```
-
 ## Usage
 A `BertModel` can be loaded and initialized from a file, as in the example below:
 
@@ -76,12 +81,12 @@ cargo run --bin server -- path/to/model/dir
 
 The model directory should contain a `bert_model.safetensors` and `bert_config.json` file. Once the server is running, inference can be initiated via POST request:
 
-```json
+```
 POST http://localhost:3030/embed
 
 {
   "input_ids": [[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]],
-	"attention_mask": [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]
+  "attention_mask": [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]
 }
 ```
 
