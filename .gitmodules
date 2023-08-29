@@ -1,6 +1,6 @@
-[submodule "burn"]
-	path = burn
+[submodule "dependencies/burn"]
+	path = dependencies/burn
 	url = https://github.com/burn-rs/burn.git
-[submodule "candle"]
-	path = candle
+[submodule "dependencies/candle"]
+	path = dependencies/candle
 	url = https://github.com/huggingface/candle.git
