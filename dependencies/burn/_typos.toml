@@ -1,8 +1,0 @@
-[default]
-extend-ignore-identifiers-re = [
-    "NdArray*",
-    "ND"
-]
-
-[files]
-extend-exclude = ["assets/ModuleSerialization.xml"]
