@@ -6,10 +6,10 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-burn = { path="./burn/burn" } # v0.8.0 was not compiling for some reason
-burn-wgpu = { path="./burn/burn-wgpu" }
-burn-tch = { path="./burn/burn-tch" }
-candle = { path="./candle/candle-core", package = "candle-core", features = ["accelerate"] }
+burn = { path="./dependencies/burn/burn" } # v0.8.0 was not compiling for some reason
+burn-wgpu = { path="./dependencies/burn/burn-wgpu" }
+burn-tch = { path="./dependencies/burn/burn-tch" }
+candle = { path="./dependencies/candle/candle-core", package = "candle-core", features = ["accelerate"] }
 libm = "0.2.7"
 npy = "0.4.0"
 ndarray = "0.15.6"
