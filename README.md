@@ -10,7 +10,7 @@
 
 # Sentence Transformers in Burn
 
-This library provides an implementation of the [Sentence Transformers](https://github.com/UKPLab/sentence-transformers) framework for computing text representations as vector embeddings in Rust. Specifically, it uses the [Burn](https://github.com/burn-rs/burn) deep learning to implement the **BERT model**. Using Burn, this can be combined with any supported backend for fast, efficient, cross-platform inference on CPUs and GPUs. ST-Burn supports any [state-of-the-art model](https://huggingface.co/spaces/mteb/leaderboard) that implements the BERT architecture.
+This library provides an implementation of the [Sentence Transformers](https://github.com/UKPLab/sentence-transformers) framework for computing text representations as vector embeddings in Rust. Specifically, it uses the [Burn](https://github.com/burn-rs/burn) deep learning library to implement the **BERT model**. Using Burn, this can be combined with any supported backend for fast, efficient, cross-platform inference on CPUs and GPUs. ST-Burn supports any [state-of-the-art model](https://huggingface.co/spaces/mteb/leaderboard) that implements the BERT architecture.
 
 Currently **inference-only** for now.
 
@@ -77,7 +77,7 @@ model.forward(batch); // [batch_size, seq_len, n_dims]
 `sentence-transformers-burn` also comes with a built-in **inference server**. To start, simply run:
 
 ```
-cargo run --bin server -- path/to/model/dir
+cargo run --release --bin server -- path/to/model/dir
 ```
 
 The model directory should contain a `bert_model.safetensors` and `bert_config.json` file. Once the server is running, inference can be initiated via POST request:
